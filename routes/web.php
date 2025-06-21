@@ -3,16 +3,20 @@
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\PublicProfileController;
+use App\Http\Controllers\FollowerController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/@{user:username}', [PublicProfileController::class, 'show'])->name('profile.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [PostController::class, 'index'])->name('dashboard');
     Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
     Route::post('/post-store', [PostController::class, 'store'])->name('post.store');
     Route::get('/@{username}/{post:slug}', [PostController::class, 'show'])->name('post.show');
+    Route::post('/follow/{user}', [FollowerController::class, 'followUnfollow'])->name('follow');
 });
 
 Route::middleware('auth')->group(function () {
