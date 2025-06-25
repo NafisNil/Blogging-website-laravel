@@ -18,8 +18,13 @@ class PostController extends Controller
     public function index()
     {
         //
-       
-        $posts = Post::orderBy('id','desc')->paginate(20);
+       $user = auth()->user();
+       $query = Post::orderBy('id','desc');
+        if ($user) {
+            $ids = $user->following()->pluck('users.id');
+           $query->whereIn('user_id', $ids);
+        }
+        $posts = $query->paginate(20);
         return view('post.index',[
             'posts' => $posts,
         ]);
@@ -90,5 +95,13 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+
+    public function category(Category $category)
+    {
+        $posts = $category->posts()->orderBy('id', 'desc')->paginate(20);
+        return view('post.index', [
+            'posts' => $posts,
+        ]);
     }
 }

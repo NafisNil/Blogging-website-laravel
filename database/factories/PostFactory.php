@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Category;
+use App\Models\User;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
  */
@@ -25,7 +26,7 @@ class PostFactory extends Factory
             'slug' => Str::slug($title),
             'content' => fake()->paragraphs(3, true),
             'category_id' => Category::inRandomOrder()->first()->id,
-            'user_id' => 3, // Assuming user with ID 1 exists
+            'user_id' => User::inRandomOrder()->first()->id,
             'published_at' => fake()->optional()->dateTime()
         ];
     }
